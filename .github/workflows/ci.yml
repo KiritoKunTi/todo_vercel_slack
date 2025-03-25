@@ -38,3 +38,13 @@ jobs:
 
       - name: Деплой в Vercel
         run: vercel --prod --yes --token ${{ secrets.VERCEL_TOKEN }}
+
+  notify:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Отправка уведомления в Slack
+        run: |
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "✅ Деплой успешно завершён!"
+          }' ${{ secrets.SLACK_WEBHOOK_URL }}
